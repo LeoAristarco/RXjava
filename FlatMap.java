@@ -1,4 +1,38 @@
+package com.fusap.sanofi.backend;
+
+import java.util.ArrayList;
+
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
+public class MainTest {
+
     public static void main (String [ ] args) {
+
+
+        Observer<Integer> observerx = new Observer<Integer>() {
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                System.out.println("onSubscribe");
+            }
+
+            @Override
+            public void onNext(Integer numero) {
+                System.out.println(numero.toString() + "teclado");
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                System.out.println("onError");
+            }
+
+            @Override
+            public void onComplete() {
+                System.out.println("onComplete");
+            }
+        };
 
         ArrayList<Integer> numeros= new ArrayList<Integer>();
 
@@ -9,17 +43,18 @@
         numeros.add(5);
         numeros.add(6);
 
-        System.out.println("HOLAAAA");
-        System.out.println(numeros);
-
 
         Observable.fromArray(numeros)
-                .flatMap(algo->Observable.fromIterable(algo))
-                .map(a->String.valueOf("{"+a))
-                .subscribe(b-> System.out.print(b));
+                .flatMap(s-> hacerAlgo(s))
+                .subscribe(observerx);
 
-        System.out.println("");
-        System.out.println("sss");
-    }
 
     }
+
+    private static Observable<Integer> hacerAlgo(ArrayList<Integer> s) {
+        s.add(33);
+        return Observable.fromIterable(s);
+    }
+
+
+}
